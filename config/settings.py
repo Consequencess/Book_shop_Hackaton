@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     ####
     'rest_framework',
     'rest_framework_simplejwt',
+    # 'django_filters',
+    'drf_yasg',
     ####
     'applications.account',
     'applications.likes',
-    'applications.books'
+    'applications.books',
+    # 'applications.images'
 
 
 ]
@@ -184,3 +187,14 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 
 BROKER_URL = 'redis://127.0.0.1:6379/0'
 BROKER_TRANSPORT = 'redis'
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS':{
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization',
+        }
+    }
+
+}
