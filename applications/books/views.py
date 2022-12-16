@@ -1,10 +1,26 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from applications.books.models import Books
-from applications.books.serializer import BookSerializer
+from applications.books.models import Books, Category
+from applications.books.serializer import BookSerializer, CategorySerializer
+from rest_framework import mixins
 
 
 class BookAPIView(ModelViewSet):
     queryset = Books.objects.all()
     serializer_class = BookSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class CategoryAPIView(mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.ListModelMixin,
+                      GenericViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]

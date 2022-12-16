@@ -59,6 +59,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True, min_length=6)
     new_password_confirm = serializers.CharField(required=True, min_length=6)
+
     def validate(self, attrs):
         p1 = attrs.get('new_password')
         p2 = attrs.get('new_password_confirm')
