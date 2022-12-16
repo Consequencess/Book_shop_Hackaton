@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
 
 User = get_user_model()
 
@@ -16,14 +14,12 @@ class Category(models.Model):
 
 class Books(models.Model):
     title = models.CharField(max_length=100)
-    author = models.CharField(max_length=30)
+    author = models.CharField(max_length=40)
     description = models.TextField()
+    price = models.PositiveIntegerField(default=250)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='books')
 
-    def __str__(self):
-        return self.title
 
-    class Meta:
-        verbose_name_plural = 'Books'
-        verbose_name = 'Book'
+
 

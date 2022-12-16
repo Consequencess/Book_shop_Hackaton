@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     ####
     'applications.account',
-    'applications.books',
-    'applications.likes'
+    'applications.likes',
+    'applications.books'
 
 
 ]
