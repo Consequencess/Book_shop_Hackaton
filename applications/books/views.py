@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django_filters import OrderingFilter
+# from django_filters import OrderingFilter, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -26,6 +26,10 @@ class BookAPIView(LikedMixin, ModelViewSet):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     pagination_class = LargeResultsSetPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['category', 'owner']
+    search_fields = ['title', 'description']
+    ordering_fields = ['id']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

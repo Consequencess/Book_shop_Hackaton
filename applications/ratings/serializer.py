@@ -1,12 +1,20 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 
-from applications.ratings.models import Rating
+User = get_user_model()
 
 
-class RatingSerializer(serializers.ModelSerializer):
-    # owner = serializers.ReadOnlyField()
-    rating = serializers.IntegerField(min_value=1, max_value=5)
+class ReviewersSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
 
     class Meta:
-        model = Rating
-        fields = ['rating']
+        model = User
+        fields = (
+            'username',
+            'full_name',
+        )
+
+    @staticmethod
+    def get_full_name(obj):
+        return obj.get_full_name()

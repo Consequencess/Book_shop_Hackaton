@@ -1,20 +1,25 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from applications.books.models import Books
 
 User = get_user_model()
 
+STAR = (
+    (1, '1/5'),
+    (2, '2/5'),
+    (3, '3/5'),
+    (4, '4/5'),
+    (5, '5/5'),
+)
+
 
 class Rating(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
-    post = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='ratings')
-    rating = models.SmallIntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(5)
-        ], blank=True, null=True
-    )
-
-    def __str__(self):
-        return f'{self.owner} -> {self.rating}'
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='ratings',
+                             on_delete=models.CASCADE)
+    star = models.PositiveSmallIntegerField(choices=STAR, help_text='max 5 stars')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id', 'star')
