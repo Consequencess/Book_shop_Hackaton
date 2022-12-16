@@ -11,7 +11,7 @@ class FanSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'username',
+            'email',
             'full_name',
         )
 

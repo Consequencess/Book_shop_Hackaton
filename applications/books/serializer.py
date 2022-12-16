@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from applications.likes import services as likes_services
 from applications.books.models import Category, Books
 
 
@@ -20,7 +20,19 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Books
-        fields = '__all__'
+        fields = (
+            'id', 'title',
+            'author', 'description',
+            'price', 'owner', 'category',
+            'total_likes'
+        )
+
+    def get_is_fan(self, obj) -> bool:
+        """
+        Проверяет, лайкнул ли `request.user`, book (`obj`)
+        """
+        user = self.context.get('request').user
+        return likes_services.is_fan(obj, user)
 
 
 
