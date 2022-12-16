@@ -7,6 +7,9 @@ User = get_user_model()
 
 
 def add_rating(obj, user, star):
+    """
+    Ставит рейтинг на `obj`
+    """
     obj_type = ContentType.objects.get_for_model(obj)
     Rating.objects.filter(
         content_type=obj_type, object_id=obj.id, user=user
@@ -17,6 +20,9 @@ def add_rating(obj, user, star):
 
 
 def remove_rating(obj, user):
+    """
+    Удаляет рейтинг с `obj`
+    """
     obj_type = ContentType.objects.get_for_model(obj)
     Rating.objects.filter(
         content_type=obj_type, object_id=obj.id, user=user
@@ -24,6 +30,9 @@ def remove_rating(obj, user):
 
 
 def is_reviewer(obj, user) -> bool:
+    """
+    Проверяет, поставил ли рейтинг `user` `obj`
+    """
     if not user.is_authenticated:
         return False
     obj_type = ContentType.objects.get_for_model(obj)
@@ -33,6 +42,9 @@ def is_reviewer(obj, user) -> bool:
 
 
 def get_reviewers(obj):
+    """
+    Получает всех пользователей, которые дали рейтинг на `obj`
+    """
     obj_type = ContentType.objects.get_for_model(obj)
     return User.objects.filter(
         ratings__content_type=obj_type, ratings__object_id=obj.id)

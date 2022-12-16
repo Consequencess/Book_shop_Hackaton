@@ -10,6 +10,9 @@ class GiveRatingMixin:
 
     @action(methods=['POST'], detail=True)
     def give_rating(self, request, pk=None):
+        """
+        Ставит рейтинг на `obj`
+        """
         obj = self.get_object()
         star = request.data['star']
         if float(star) <= 5:
@@ -19,12 +22,18 @@ class GiveRatingMixin:
 
     @action(methods=['POST'], detail=True)
     def del_rating(self, request, pk=None):
+        """
+        Удаляет рейтинг с `obj`
+        """
         obj = self.get_object()
         services.remove_rating(obj, request.user)
         return Response('Рейтинг успешно удален', status=status.HTTP_200_OK)
 
     @action(methods=['GET'], detail=True)
     def reviewers(self, request, pk=None):
+        """
+        Получает всех пользователей, которые поставили рейтинг на `obj`
+        """
         obj = self.get_object()
         reviewers = services.get_reviewers(obj)
         serializer = ReviewersSerializer(reviewers, many=True)
