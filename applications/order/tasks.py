@@ -1,20 +1,14 @@
 from django.core.mail import send_mail
-from .models import Order
+
 from config.celery import app
 
 
 @app.task
-def order_created(order_id):
-    """
-    Задача для отправки уведомления по электронной почте при успешном создании заказа.
-    """
-    order = Order.objects.get(id=order_id)
-    subject = 'Order nr. {}'.format(order_id)
-    message = 'Dear {},\n\nYou have successfully placed an order.\
-                Your order id is {}.'.format(order.first_name,
-                                             order.id)
-    mail_sent = send_mail(subject,
-                          message,
-                          'read87488@gmail.com',
-                          [order.email])
-    return mail_sent
+def send_confirm_link(email, confirm_code):
+    full_link = f'http://localhost:8000/order/confirm/{confirm_code}'
+    send_mail(
+        'Ссылка для подтверждение заказа',
+        full_link,
+        'read87488@gmail.com',
+        [email]
+    )

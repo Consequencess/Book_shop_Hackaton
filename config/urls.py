@@ -14,9 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+
+from django.conf import settings
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -31,5 +34,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('swagger/', schema_view.with_ui('swagger')),
     path('account/', include('applications.account.urls')),
-    path('books/', include('applications.books.urls'))
+    path('books/', include('applications.books.urls')),
+    path('order/', include('applications.order.urls'))
 ]
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
