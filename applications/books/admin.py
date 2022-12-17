@@ -1,9 +1,18 @@
 from django.contrib import admin
 
-from applications.books.models import Category, Books
+from applications.books.models import Category, Books, Image
+
+
+class ImageAdmin(admin.TabularInline):
+    model = Image
+    fields = ('image',)
+    max_num = 10
 
 
 class BooksAdmin(admin.ModelAdmin):
+    inlines = [
+        ImageAdmin
+    ]
     list_display = ['id', 'title', 'books_count_like']
 
     def books_count_like(self, obj):
@@ -12,4 +21,6 @@ class BooksAdmin(admin.ModelAdmin):
 
 admin.site.register(Category)
 admin.site.register(Books, BooksAdmin)
+admin.site.register(Image)
+
 

@@ -47,6 +47,12 @@ class Books(models.Model):
         return Rating.objects.aggregate(Avg('star'))
 
 
+class Image(models.Model):
+    book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='images/')
+    fields = 'total_likes'
+
+
 
 
 

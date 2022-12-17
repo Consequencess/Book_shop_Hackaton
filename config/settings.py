@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'applications.likes',
     'applications.books',
     'applications.ratings',
-    'applications.comments'
+    'applications.comments',
+    'applications.order',
 
 
 ]

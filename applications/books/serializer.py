@@ -1,12 +1,18 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Avg
 from rest_framework import serializers
-
 from applications.comments.serializer import CommentSerializer
 from applications.likes import services as likes_services
-from applications.books.models import Category, Books
+from applications.books.models import Category, Books, Image
 from applications.ratings import services as ratings_services
 from applications.ratings.models import Rating
+
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -24,6 +30,7 @@ class BookSerializer(serializers.ModelSerializer):
     """
     owner = serializers.ReadOnlyField(source='owner.email')
     comments = CommentSerializer(many=True, read_only=True)
+    images = ImageSerializer(many=True, read_only=True)
     is_fan = serializers.SerializerMethodField()
     is_reviewer = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
@@ -34,6 +41,7 @@ class BookSerializer(serializers.ModelSerializer):
             'id', 'title',
             'author', 'description',
             'price', 'owner', 'category',
+            'images',
             'is_fan',
             'total_likes',
             'total_rating',
@@ -58,6 +66,15 @@ class BookSerializer(serializers.ModelSerializer):
         ratings = Rating.objects.filter(
             content_type=obj_type, object_id=obj.id).aggregate(Avg('star'))['star__avg']
         return ratings
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        fields_data = request.FILES
+        book = Books.objects.create(**validated_data)
+        book.save()
+        for image in fields_data.getlist('images'):
+            Image.objects.create(book=book, image=image)
+        return book
 
 
 
