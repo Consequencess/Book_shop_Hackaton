@@ -1,6 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Avg
 from rest_framework import serializers
+
+from applications.comments.serializer import CommentSerializer
 from applications.likes import services as likes_services
 from applications.books.models import Category, Books
 from applications.ratings import services as ratings_services
@@ -21,6 +23,7 @@ class BookSerializer(serializers.ModelSerializer):
     Серилизатор книги
     """
     owner = serializers.ReadOnlyField(source='owner.email')
+    comments = CommentSerializer(many=True, read_only=True)
     is_fan = serializers.SerializerMethodField()
     is_reviewer = serializers.SerializerMethodField()
     total_rating = serializers.SerializerMethodField()
@@ -35,6 +38,7 @@ class BookSerializer(serializers.ModelSerializer):
             'total_likes',
             'total_rating',
             'is_reviewer',
+            'comments'
         )
 
     def get_is_fan(self, obj) -> bool:
