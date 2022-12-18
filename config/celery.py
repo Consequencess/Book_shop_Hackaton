@@ -12,7 +12,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 app.conf.beat_schedule = {
     'send-spam': {
-        'task': 'applications.spam.tasks.spam_message',
+        'task': 'applications.account.tasks.spam_message',
         'schedule': crontab(minute='*/1')
     }
 }

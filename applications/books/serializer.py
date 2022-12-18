@@ -8,7 +8,6 @@ from applications.ratings import services as ratings_services
 from applications.ratings.models import Rating
 
 
-
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
@@ -46,7 +45,7 @@ class BookSerializer(serializers.ModelSerializer):
             'total_likes',
             'total_rating',
             'is_reviewer',
-            'comments'
+            'comments',
         )
 
     def get_is_fan(self, obj) -> bool:
@@ -75,6 +74,7 @@ class BookSerializer(serializers.ModelSerializer):
         for image in fields_data.getlist('images'):
             Image.objects.create(book=book, image=image)
         return book
+
 
 
 

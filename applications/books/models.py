@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import Avg
-
 from applications.likes.models import Like
 from applications.ratings.models import Rating
 
@@ -51,6 +50,10 @@ class Image(models.Model):
     book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='images/')
     fields = 'total_likes'
+
+
+
+
 
 
 

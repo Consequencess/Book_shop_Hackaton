@@ -1,17 +1,12 @@
 from django.shortcuts import render
-# from django_filters import OrderingFilter, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-
 from applications.books.models import Books, Category
 from applications.books.serializer import BookSerializer, CategorySerializer
 from rest_framework import mixins
-
 from applications.likes.mixins import LikedMixin
 
 
@@ -42,3 +37,5 @@ class CategoryAPIView(mixins.CreateModelMixin,
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+
